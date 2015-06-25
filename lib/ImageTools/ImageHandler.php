@@ -45,7 +45,7 @@ abstract class ImageTools_ImageHandler {
 
 		// create the cache id
 		$this->cacheFile = str_replace('//','/', DOCUMENT_ROOT . self::$cacheDir . $this->fileName . "-" . md5($this->getHash()) . '.' . $this->imageType);
-		
+
 		if (($this->noCache) && (file_exists($this->cacheFile))) {
             unlink($this->cacheFile);
         } else {
@@ -74,7 +74,7 @@ abstract class ImageTools_ImageHandler {
 	 */
 	protected function getFile($file) {
 		$file = urldecode($file);
-	
+
 		if (!@file_get_contents($file))
 		{
 			if (substr($file,0,1) == "/") $file = substr($file,1);

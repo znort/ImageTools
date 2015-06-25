@@ -1,7 +1,7 @@
 <?php /*
 Thumbnail Class v1.4
 ______________________________________________________________________
-Creates a thumbnailed image based on info passed to it and returns a reference to a cached thumbnail file
+Creates a thumbnailed image based on info passed to it and returns either the raw image data or a reference to a cached thumbnail file
 
 Images are cached on the server, so server processing overhead is only
 needed for the first time the script runs on a particular image.
@@ -48,9 +48,10 @@ Changes:
 1.6 - domain locking applied -> thumb_domains.txt file is required and contains a list of domains allowed to use this script (backwards-compatible)
     - thumb_domains.txt should contain coma separated domain list i.e. (www.domain.co.uk) with no "http://" prefix
 */
+if (!defined('DOCUMENT_ROOT')) define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
-if (!isset($_GET['quality'])) $_GET['quality'] = 85;
-if (!isset($_GET['alt'])) $_GET['alt'] = "public/images/sleight.gif";
+if (!isset($_GET['quality'])) $_GET['quality'] = 85;                    // will default to a compression level of 85 if the quality parameter is not set
+if (!isset($_GET['alt'])) $_GET['alt'] = "/missing.png";   // replace this with an image that is to be used as a placeholder when the image being processed doesn't exist and the 'alt' parameter is not set.
 
 if (isset($_GET['id'])) {
 	$image = ImageTools_DatabaseImage::getImage($_GET['id'],@$_GET['size'],@$_GET['sizex'],@$_GET['sizey'], false, $_GET['quality'], $_GET['alt'], @$_GET['crop']);
@@ -62,7 +63,7 @@ if (isset($_GET['id'])) {
         $_GET['file'] = substr($_GET['file'],1);
     }
     $parsed = parse_url($_GET['file']);
-	if (!file_exists($_GET['file']) && empty($parsed['scheme'])) {
+	if (!file_exists(DOCUMENT_ROOT . '/' . $_GET['file']) && empty($parsed['scheme'])) {
         $_GET['file'] = $_GET['alt'];
     }
 	 
@@ -147,7 +148,7 @@ abstract class ImageTools_ImageHandler {
 
 		// create the cache id
 		$this->cacheFile = str_replace('//','/', DOCUMENT_ROOT . self::$cacheDir . $this->fileName . "-" . md5($this->getHash()) . '.' . $this->imageType);
-		
+
 		if (($this->noCache) && (file_exists($this->cacheFile))) {
             unlink($this->cacheFile);
         } else {
@@ -176,7 +177,7 @@ abstract class ImageTools_ImageHandler {
 	 */
 	protected function getFile($file) {
 		$file = urldecode($file);
-	
+
 		if (!@file_get_contents($file))
 		{
 			if (substr($file,0,1) == "/") $file = substr($file,1);
@@ -378,6 +379,7 @@ class ImageTools_Thumbnail extends ImageTools_ImageHandler
 	
 	public function prepare() {
 		// find file
+
 		if ($this->file = parent::getFile($this->file)) {
 			if (parent::isImage($this->file)) {
 				return parent::prepare();

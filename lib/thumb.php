@@ -49,14 +49,15 @@ Changes:
 1.6 - domain locking applied -> thumb_domains.txt file is required and contains a list of domains allowed to use this script (backwards-compatible)
     - thumb_domains.txt should contain coma separated domain list i.e. (www.domain.co.uk) with no "http://" prefix
 */
+if (!defined('DOCUMENT_ROOT')) define('DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
 
 if (!isset($_GET['quality'])) $_GET['quality'] = 85;                    // will default to a compression level of 85 if the quality parameter is not set
-if (!isset($_GET['alt'])) $_GET['alt'] = "public/images/sleight.gif";   // replace this with an image that is to be used as a placeholder when the image being processed doesn't exist and the 'alt' parameter is not set.
+if (!isset($_GET['alt'])) $_GET['alt'] = "/missing.png";   // replace this with an image that is to be used as a placeholder when the image being processed doesn't exist and the 'alt' parameter is not set.
 
 if (isset($_GET['id'])) {
 	$image = ImageTools_DatabaseImage::getImage($_GET['id'],@$_GET['size'],@$_GET['sizex'],@$_GET['sizey'], false, $_GET['quality'], $_GET['alt'], @$_GET['crop']);
 } else {
-	require_once("lib/ImageTools/ThumbNail.php");
+	require_once("ImageTools/ThumbNail.php");
 	if (!isset($_GET['file']) || is_dir($_GET['file'])) {
         $_GET['file']="";
     }
@@ -64,7 +65,7 @@ if (isset($_GET['id'])) {
         $_GET['file'] = substr($_GET['file'],1);
     }
     $parsed = parse_url($_GET['file']);
-	if (!file_exists($_GET['file']) && empty($parsed['scheme'])) {
+	if (!file_exists(DOCUMENT_ROOT . '/' . $_GET['file']) && empty($parsed['scheme'])) {
         $_GET['file'] = $_GET['alt'];
     }
 	 

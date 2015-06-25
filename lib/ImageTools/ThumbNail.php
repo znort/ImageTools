@@ -40,6 +40,7 @@ class ImageTools_Thumbnail extends ImageTools_ImageHandler
 	
 	public function prepare() {
 		// find file
+
 		if ($this->file = parent::getFile($this->file)) {
 			if (parent::isImage($this->file)) {
 				return parent::prepare();

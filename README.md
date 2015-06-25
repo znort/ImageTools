@@ -19,19 +19,15 @@ Images are cached on the server, so server processing overhead is only needed fo
     <img src="thumb.php?file=FILE&sizex=SIZEX&sizey=SIZEY"> - to  size the thumbnail to fit a rectangle
 
     <img src="thumb.php?file=FILE&size=SIZE&quality=QUALITY&nocache=NOCACHE"> -  to set a thumbnails quality
-Where:
 
-FILE = the file to retrieve
-SIZE = the maximum size of the thumbnail in pixels
-SIZEX = the maximum width of the thumbnail (height adjusted accordingly)
-SIZEY = the maximum height of the thumbnail (width adjusted accordingly)
-QUALITY = an integer from 0-100 specifying the resulting jpeg quality of the image
-NOCACHE = an integer 1 or 0. If set to 1, the cached thumbnail is deleted and recreated (use if the source image changes)
 ###Features:
 
 * Server caching of images
 * Creation of jpeg thumbnails inline, on the fly
 * Can be used for non-local images, if allow_fopen_url in the php configuration is set to true
+
+###Parameters:
+
 
 ###Requires:
 
