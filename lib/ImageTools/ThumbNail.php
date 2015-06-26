@@ -332,13 +332,13 @@ class ImageTools_Thumbnail extends ImageTools_ImageHandler
 	private function createCorners()
 	{
 		#check if coners are required
-		if (@$_GET['corner_size']<>"")
+		if ($this->cornerSize)
 		{
-			$col_ellipse = getBlendableColor($bg_col);
-		
+			$col_ellipse = $this->getBlendableColor($this->backgroundColour);
+
 			if($this->borderThickness > 0)
 			{
-				$col_ellipse = getBlendableColor($bd_col);
+				$col_ellipse = $this->getBlendableColor($this->backgroundColour);
 		
 				$this->addCorners($thumbnail, $this->cornerSize, $this->borderColour, $col_ellipse);
 				$thumbnail = addBorder($thumbnail, $this->borderThickness, $this->borderColour);

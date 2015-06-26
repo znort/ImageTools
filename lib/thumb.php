@@ -100,6 +100,12 @@ if (isset($_GET['id'])) {
         $y = $points[1];
         $image->cropToSize($x,$y);
     }
+    if (@$_GET['cornerSize'] > 0) {
+        $image->cornerSize = $_GET['cornerSize'];
+    }
+    if (@$_GET['text']) {
+        $image->text = $_GET['text'];
+    }
 }
 if (is_object($image)) {
 	$image->render();

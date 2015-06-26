@@ -98,6 +98,12 @@ if (isset($_GET['id'])) {
         $y = $points[1];
         $image->cropToSize($x,$y);
     }
+    if (@$_GET['cornerSize'] > 0) {
+        $image->cornerSize = $_GET['cornerSize'];
+    }
+    if (@$_GET['text']) {
+        $image->text = $_GET['text'];
+    }
 }
 if (is_object($image)) {
 	$image->render();
@@ -671,13 +677,13 @@ class ImageTools_Thumbnail extends ImageTools_ImageHandler
 	private function createCorners()
 	{
 		#check if coners are required
-		if (@$_GET['corner_size']<>"")
+		if ($this->cornerSize)
 		{
-			$col_ellipse = getBlendableColor($bg_col);
-		
+			$col_ellipse = $this->getBlendableColor($this->backgroundColour);
+
 			if($this->borderThickness > 0)
 			{
-				$col_ellipse = getBlendableColor($bd_col);
+				$col_ellipse = $this->getBlendableColor($this->backgroundColour);
 		
 				$this->addCorners($thumbnail, $this->cornerSize, $this->borderColour, $col_ellipse);
 				$thumbnail = addBorder($thumbnail, $this->borderThickness, $this->borderColour);
